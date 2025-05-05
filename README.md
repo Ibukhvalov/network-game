@@ -2,5 +2,5 @@
 docker
 
 # Deploy
-docker compose up -d --build
-docket attach network-server
+```docker compose up -d --build &&
+docker attach network-server```
