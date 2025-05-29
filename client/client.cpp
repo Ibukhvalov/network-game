@@ -115,7 +115,7 @@ void register_client() {
 
 int main(int argc, char **argv) {
   if (argc < 2) {
-    std::cout << "Player name was not specified, terminte program\n";
+    std::cout << "Player name was not specified, terminate program\n";
     return 1;
   }
 
@@ -132,7 +132,13 @@ int main(int argc, char **argv) {
   }
   log_out("Socket was created");
 
-  resolve_name("server", server_addr);
+  memset(&server_addr, 0, sizeof(server_addr));
+  server_addr.sin_family = AF_INET;
+  server_addr.sin_port = htons(8080);
+
+  if (inet_pton(AF_INET, "172.25.0.10", &server_addr.sin_addr) <= 0) {
+    log_err("Invalid server IP address");
+  }
   char server_ip_str[INET_ADDRSTRLEN];
   inet_ntop(AF_INET, &server_addr.sin_addr, server_ip_str,
             sizeof(server_ip_str));

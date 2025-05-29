@@ -3,11 +3,16 @@ services:
       build:
         context: ./server/
         dockerfile: Dockerfile
-      container_name: network-server
       ports:
         - "8080:8080/udp"
       networks:
-        - game_net
+        game_net:
+          ipv4_address: 172.25.0.10
+      cap_add:
+        - NET_ADMIN
+      entrypoint: ["/entrypoint.sh"]
+      volumes:
+        - ./server/entrypoint.sh:/entrypoint.sh
       stdin_open: true
       tty: true
       
@@ -18,12 +23,20 @@ services:
       depends_on:
         - server
       networks:
-        - game_net
+        game_net: {}
       deploy:
         replicas: 5
       command: >
         bash -c './client Player_$$(hostname)'
+      cap_add:
+        - NET_ADMIN
+      entrypoint: ["/entrypoint.sh"]
+      volumes:
+        - ./client/entrypoint.sh:/entrypoint.sh
     
 networks:
     game_net:
         driver: bridge
+        ipam:
+          config:
+            - subnet: 172.25.0.0/24 # ¯\_(ツ)_/¯

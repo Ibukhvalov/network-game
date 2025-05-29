@@ -1,7 +1,9 @@
 FROM gcc
 RUN apt-get update && apt-get install -y \
     net-tools \
-    bash
+    bash \
+    iptables \
+    iproute2
 
 WORKDIR /app
 COPY server.cpp .
