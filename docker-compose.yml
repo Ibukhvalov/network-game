@@ -16,16 +16,66 @@ services:
       stdin_open: true
       tty: true
       
-    client:
+    client1:
       build:
         context: ./client/
         dockerfile: Dockerfile
       depends_on:
         - server
       networks:
-        game_net: {}
-      deploy:
-        replicas: 5
+        game_net:
+          ipv4_address: 172.25.0.11
+      command: >
+        bash -c './client Player_$$(hostname)'
+      cap_add:
+        - NET_ADMIN
+      entrypoint: ["/entrypoint.sh"]
+      volumes:
+        - ./client/entrypoint.sh:/entrypoint.sh
+
+    client2:
+      build:
+        context: ./client/
+        dockerfile: Dockerfile
+      depends_on:
+        - server
+      networks:
+        game_net:
+          ipv4_address: 172.25.0.12
+      command: >
+        bash -c './client Player_$$(hostname)'
+      cap_add:
+        - NET_ADMIN
+      entrypoint: ["/entrypoint.sh"]
+      volumes:
+        - ./client/entrypoint.sh:/entrypoint.sh
+
+    client3:
+      build:
+        context: ./client/
+        dockerfile: Dockerfile
+      depends_on:
+        - server
+      networks:
+        game_net:
+          ipv4_address: 172.25.0.13
+      command: >
+        bash -c './client Player_$$(hostname)'
+      cap_add:
+        - NET_ADMIN
+      entrypoint: ["/entrypoint.sh"]
+      volumes:
+        - ./client/entrypoint.sh:/entrypoint.sh
+
+    client4:
+      build:
+        context: ./client/
+        dockerfile: Dockerfile
+      depends_on:
+        - server
+      networks:
+        game_net:
+          ipv4_address: 172.25.0.14
       command: >
         bash -c './client Player_$$(hostname)'
       cap_add:

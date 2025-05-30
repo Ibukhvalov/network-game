@@ -130,7 +130,27 @@ int main(int argc, char **argv) {
     log_err("Creating socket wasnt successful");
     return 1;
   }
-  log_out("Socket was created");
+  log_out("Client socket was created");
+
+  sockaddr_in client_addr{};
+  client_addr.sin_family = AF_INET;
+  client_addr.sin_addr.s_addr = INADDR_ANY; // why htonl() used at this point on server??
+
+  // если внутри докера то они все будут на 8081 итс окей, но я все равно добавил range
+  bool bound_successfully = false;
+  for (int port = 8081; port <= 8085; ++port) {
+      client_addr.sin_port = htons(port);
+      if (bind(client_socket, (sockaddr*)&client_addr, sizeof(client_addr)) == 0) {
+          std::cout << "Client socket successfully bound to port " << port << std::endl;
+          bound_successfully = true;
+          break;
+      }
+  }
+
+  if (!bound_successfully) {
+      log_err("Failed to bind client socket to any port in range");
+      return 1;
+  }
 
   memset(&server_addr, 0, sizeof(server_addr));
   server_addr.sin_family = AF_INET;

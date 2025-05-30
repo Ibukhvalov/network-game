@@ -334,8 +334,8 @@ int main() {
         Client newClient{playerName, client_addr, time(nullptr), true};
         clientManager.add(newClient);
       } else if (msg == "PING") {
-        //log_out_main("Ping has been recieved from " +
-          //           clientManager.get_name(clientKey));
+        log_out_main("Ping has been recieved from " +
+                    clientManager.get_name(clientKey));
         clientManager.handle_ping(clientKey);
       } else if (msg == "SPLIT") {
         if (!clientManager.answer(clientKey, GameChoice::SPLIT)) {
